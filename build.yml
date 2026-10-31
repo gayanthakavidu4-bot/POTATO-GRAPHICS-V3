@@ -32,8 +32,21 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
+      - - name: Check project structure
+        run: 
+          echo "ROOT FILES:"
+          ls -la
+          echo "APP DIRECTORY:"
+          ls -la app || true
+          echo "GRADLE MODULES:"
+          cat settings.gradle
+
+      - name: List Gradle tasks
+        run: gradle tasks --all
+
       - name: Build debug APK
-        run: gradle assembleDebug
+        run: gradle :app:assembleDebug
+        
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -41,3 +54,4 @@ jobs:
           name: POTATO-GRAPHICS-V3-APK
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+          
